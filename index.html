@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>妙麗年齡計算機｜Hogwarts Edition</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: "Noto Sans TC", sans-serif;
+      background: radial-gradient(circle at top, #1b1b2f, #0f0f17 70%);
+      color: #f5d67b;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      font-family: "Cinzel", serif;
+      font-size: 32px;
+      margin-top: 10px;
+      color: #f6e9b2;
+      text-shadow: 0 0 8px #d4af37;
+      letter-spacing: 2px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
+      border-radius: 18px;
+      padding: 25px;
+      max-width: 480px;
+      margin: 30px auto;
+      box-shadow: 0 0 18px rgba(255, 215, 0, 0.2);
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-size: 16px;
+      color: #f3df9b;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #bfa361;
+      background: rgba(0, 0, 0, 0.4);
+      color: #f6e9c6;
+      font-size: 16px;
+      margin-top: 6px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 12px;
+      background: linear-gradient(135deg, #bfa361, #8d6b23);
+      color: #fff8dc;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: "Cinzel", serif;
+      letter-spacing: 1px;
+      box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+      transition: 0.25s;
+    }
+
+    button:hover {
+      box-shadow: 0 0 20px rgba(255, 225, 120, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 18px;
+      background: rgba(255, 245, 215, 0.07);
+      border: 1px solid rgba(255, 245, 215, 0.3);
+      border-radius: 12px;
+      font-size: 18px;
+      line-height: 1.8;
+      color: #f7e7ca;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 35px;
+      color: #cbb57a;
+      font-size: 14px;
+      opacity: 0.9;
+      font-family: "Cinzel", serif;
+    }
+
+    /* 背景星星粒子 */
+    .stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      background: url('https://s3.beautimode.com/upload/media/30f77f542643885511ea0265e618ab80.jpg') repeat;
+      opacity: 0.25;
+      animation: starsMove 30s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes starsMove {
+      from { background-position: 0 0; }
+      to { background-position: -1000px 1000px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+
+<h1>🐾 妙麗年齡計算機<br>Hogwarts Edition 🪄</h1>
+
+<div class="card">
+
+  <label>
+    妙麗的出生日期：
+    <input type="date" id="birthDate" value="2023-02-28">
+  </label>
+
+  <button onclick="calculate()">🪄 施放「Age-ius」咒語！</button>
+
+  <div id="result" class="result" style="display:none;"></div>
+
+</div>
+
+<div class="footer">© Hogwarts Magical Department of Pet Studies</div>
+
+<script>
+  const medianHumanAgeTable = {
+    1: 15, 2: 24, 3: 28, 4: 32, 5: 36,
+    6: 43.5, 7: 48.5, 8: 53, 9: 58.5,
+    10: 63, 11: 68.5, 12: 73, 13: 78,
+    14: 83, 15: 88, 16: 93
+  };
+
+  function getDogAge(birthDate) {
+    const now = new Date();
+    const birth = new Date(birthDate);
+    return (now - birth) / (1000 * 60 * 60 * 24 * 365.25);
+  }
+
+  function convertToHumanAge(dogAge) {
+    if (dogAge >= 16) return medianHumanAgeTable[16];
+    const f = Math.floor(dogAge);
+    const c = Math.ceil(dogAge);
+    if (f === c) return medianHumanAgeTable[f];
+    const low = medianHumanAgeTable[f];
+    const high = medianHumanAgeTable[c];
+    return low + (high - low) * (dogAge - f);
+  }
+
+  function calculate() {
+    const birthDate = document.getElementById("birthDate").value;
+    if (!birthDate) return;
+
+    const dogAge = getDogAge(birthDate);
+    const humanAge = convertToHumanAge(dogAge);
+
+    document.getElementById("result").style.display = "block";
+    document.getElementById("result").innerHTML = `
+      ✨ <strong>妙麗的魔法年齡</strong>：${dogAge.toFixed(2)} 歲<br>
+      🧙‍♀️ <strong>換算人類年齡</strong>：${humanAge.toFixed(1)} 歲
+    `;
+  }
+</script>
+
+</body>
+</html>
